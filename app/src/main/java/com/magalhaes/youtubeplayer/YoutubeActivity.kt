@@ -1,5 +1,6 @@
 package com.magalhaes.youtubeplayer
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
@@ -18,6 +19,10 @@ class YoutubeActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListen
 
     private val TAG = "youtubeactivity"
 
+    private val DIALOG_REQUEST_CODE = 1
+
+    private val playerView by lazy { YouTubePlayerView(this) }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +35,7 @@ class YoutubeActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListen
 //        button1.text = "Button added"
 //        layout.addView(button1)
 
-        val playerView = YouTubePlayerView(this)
+
         playerView.layoutParams = ConstraintLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
         )
@@ -60,10 +65,9 @@ class YoutubeActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListen
         provider: YouTubePlayer.Provider?,
         youtubeInitializationResult: YouTubeInitializationResult?
     ) {
-        val REQUEST_CODE = 0
 
         if (youtubeInitializationResult?.isUserRecoverableError == true) {
-            youtubeInitializationResult.getErrorDialog(this, REQUEST_CODE).show()
+            youtubeInitializationResult.getErrorDialog(this, DIALOG_REQUEST_CODE).show()
         } else {
             val errorMessage =
                 "There was an error initializing the YoutubePlayer ($youtubeInitializationResult)"
@@ -126,6 +130,18 @@ class YoutubeActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListen
 
         override fun onError(p0: YouTubePlayer.ErrorReason?) {
 
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d(
+            TAG,
+            "onCactivityResult called with response code $requestCode for request $requestCode"
+        )
+        if (requestCode == DIALOG_REQUEST_CODE) {
+            Log.d(TAG, intent?.toString())
+            Log.d(TAG, intent?.extras.toString())
+            playerView.initialize(getString(R.string.GOOGLE_API_KEY), this)
         }
     }
 }
