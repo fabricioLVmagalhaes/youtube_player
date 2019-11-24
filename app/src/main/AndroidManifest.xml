@@ -12,12 +12,10 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".YoutubeActivity"
-            android:label="Youtube Player">
-        </activity>
+            android:label="Youtube Player"></activity>
         <activity
             android:name=".StandaloneActivity"
-            android:label="Standalone Activity">
-        </activity>
+            android:label="Standalone Activity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
